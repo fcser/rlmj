@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:websocket="http://www.springframework.org/schema/websocket"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+                        http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+                        http://www.springframework.org/schema/context
+                        http://www.springframework.org/schema/context/spring-context-4.0.xsd
+                        http://www.springframework.org/schema/mvc
+                        http://www.springframework.org/schema/mvc/spring-mvc-4.0.xsd
+        				http://www.springframework.org/schema/websocket 
+        				http://www.springframework.org/schema/websocket/spring-websocket.xsd">
+
+	<!-- 加载注解驱动 -->
+	<mvc:annotation-driven />
+
+	<!-- 扫描带Controller注解的类 -->
+	<context:component-scan
+		base-package="cn.java.rlmj.controller.*" />
+	<context:component-scan
+		base-package="cn.java.rlmj.*">
+		<context:include-filter type="annotation"
+			expression="org.springframework.stereotype.Controller" />
+		<context:include-filter type="annotation"
+			expression="org.springframework.stereotype.Service" />
+	</context:component-scan>
+ 
+	<mvc:interceptors>
+		<mvc:interceptor>
+			<mvc:mapping path="/*/*" />
+			<mvc:mapping path="/*" />
+
+			<mvc:exclude-mapping path="/*.html" />
+
+			<bean class="cn.java.rlmj.interceptor.LoginInterceptor"></bean>
+		</mvc:interceptor>
+
+	</mvc:interceptors>
+
+	<!-- <bean id="htmlViewResolver" class="org.springframework.web.servlet.view.freemarker.FreeMarkerViewResolver"> 
+		<property name="prefix" value="/" /> <property name="suffix" value=".html" 
+		/> <property name="order" value="0"></property> <property name="contentType" 
+		value="text/html;charset=UTF-8"></property> </bean> -->
+	<!-- 配置视图解析器 作用:在controller中指定页面路径的时候就不用写页面的完整路径名称了,可以直接写页面去掉扩展名的名称 -->
+	<bean
+		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<!-- 真正的页面路径 = 前缀 + 去掉后缀名的页面名称 + 后缀 -->
+		<!-- 前缀 -->
+		<property name="prefix" value="/WEB-INF/jsp/" />
+		<!-- 后缀 -->
+		<property name="suffix" value=".jsp" />
+		<property name="viewClass"
+			value="org.springframework.web.servlet.view.InternalResourceView" /> <!-- 不能用jstl的那个 -->
+		<property name="contentType" value="text/html;charset=UTF-8" />
+		<property name="order" value="0"></property>
+	</bean>
+
+	<!-- 静态资源映射 -->
+	<mvc:resources location="/" mapping="/*.html" />
+	<mvc:resources mapping="/upload/**" location="/upload/" />
+	
+
+	<!-- <bean id="websocket" class="net.webChat.webSocket.WebSocketServer" 
+		/> <websocket:handlers> <websocket:mapping path="/websocket" handler="websocket" 
+		/> <websocket:handshake-interceptors> <bean class="net.houselease.interceptor.WebSocketInterceptor" 
+		/> </websocket:handshake-interceptors> </websocket:handlers> -->
+
+	<!-- 配置文件上传 -->
+	<bean id="multipartResolver"
+		class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		<!-- 默认编码 -->
+		<property name="defaultEncoding" value="utf-8" />
+		<!-- 文件大小最大值 -->
+		<property name="maxUploadSize" value="10485760000" />
+		<!-- 内存中的最大值 -->
+		<property name="maxInMemorySize" value="40960" />
+	</bean>
+</beans>

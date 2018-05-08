@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.java.rlmj.dao.AdminMapper">
+
+	<insert id="insertAdmin" parameterType="admin">
+		insert into ad (name,password,phone) values(#{name},#{password},#{phone})
+	</insert>
+
+	<delete id="deleteAdmin" parameterType="int">
+		delete from ad where id=#{id}
+	</delete>
+
+	<update id="updateAdmin" parameterType="admin">
+		update ad set name=#{name},password=#{password},phone=#{phone} where
+		id=#{id}
+	</update>
+
+	<select id="getAdmin" parameterType="string" resultType="admin">
+		select * from ad where phone=#{phone}
+	</select>
+
+</mapper>

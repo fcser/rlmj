@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.java.rlmj.dao.VisitorsRecordMapper">
+
+	<insert id="insertVisitorsRecord" parameterType="visitorsrecord">
+		insert into travel_recods (people_id,equipment_id,datetime)
+		values(#{people_id},#{equipment_id},#{datetime})
+	</insert>
+
+	<delete id="deleteVisitorsRecord" parameterType="int">
+		delete from travel_recods where people_id=#{people_id}
+	</delete>
+
+	<update id="updateVisitorsRecord" parameterType="visitorsrecord">
+		update travel_recods set
+		people_id=#{people_id},equipment_id=#{equipment_id},datetime=#{datetime}
+		where id=#{id}
+	</update>
+
+	<select id="getVisitorsRecord" parameterType="int"
+		resultType="visitorsrecord">
+		select * from travel_recods where id=#{id}
+	</select>
+	<select id="getVisitorsRecords" resultType="visitorsrecord">
+		select * from travel_recods
+	</select>
+	
+	<select id="queryRecords" parameterType="cn.java.rlmj.pojo.QueryRecord"
+		resultType="cn.java.rlmj.pojo.QueryRecordResult">
+		select
+			tmp.people_id people_id,
+			people.name person_name,
+			equipment.id device_id,
+			equipment.house_id house_id,
+			tmp.datetime datetime
+		from
+		(
+			select 
+				people_id,
+				equipment_id,
+				datetime
+			from
+				travel_recods
+			where
+				<if test="peopleid!=null and peopleid!=0">
+				people_id = #{peopleid} and
+				</if>
+				<if test="deviceid!=null and deviceid!=0">
+				equipment_id = #{deviceid} and
+				</if>
+				datetime &gt;= #{starttime} and datetime &lt;= #{endtime}
+		) 	tmp, 
+			people, 
+			equipment
+		where
+			tmp.people_id = people.id and
+			tmp.equipment_id = equipment.id
+	</select>
+	
+	<!--  <select id="getRecords" parameterType="string" parameterType="int",resultType="unknowrecord">
+		select * from unknow_recods where
+		<if test="beginTime!=null and beginTime!=''">
+            <![CDATA[   and DATE_FORMAT(tr.add_time, '%Y-%m-%d')>=  DATE_FORMAT(#{beginTime}, '%Y-%m-%d')   ]]>
+        </if>
+        <if test="endTime!=null and endTime!=''">
+      		<![CDATA[  and DATE_FORMAT(tr.add_time, '%Y-%m-%d') <= DATE_FORMAT(#{endTime}, '%Y-%m-%d')    ]]>
+        </if>
+	</select>-->
+
+</mapper>

@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.java.rlmj.dao.PeopleMapper">
+	<resultMap id="BaseResultMap" type="cn.java.rlmj.pojo.People">
+	</resultMap>
+	<insert id="insertPeople" useGeneratedKeys="true" keyProperty="id" parameterType="people">
+		insert into
+		people(name,type,birthday,sex,house_id,room_id,phone,password
+		<if test="register !=null">
+			,register
+		</if>
+		,model,picture)
+		values(#{name},#{type},#{birthday},#{sex},#{house_id},#{room_id},#{phone},#{password}
+		<if test="register !=null">
+			,#{register}
+		</if>
+		,#{model},#{picture})
+	</insert>
+
+	<delete id="deletePeople" parameterType="int">
+		delete from people where
+		id=#{id}
+	</delete>
+
+	<update id="updatePeople" parameterType="people">
+		update people
+		<set>
+			<if test="password !=null and password !=''">
+				password=#{password},
+			</if>
+			<if test="name !=null and name !=''">
+				name=#{name},
+			</if>
+			<if test="type !=null and type !=''">
+				type=#{type},
+			</if>
+			<if test="sex !=null and sex !=''">
+				sex=#{sex},
+			</if>
+			<if test="phone !=null and phone !=''">
+				phone=#{phone},
+			</if>
+			<if test="birthday !=null and birthday !=''">
+				birthday=#{birthday},
+			</if>
+			<if test="house_id !=null and house_id !=''">
+				house_id=#{house_id},
+			</if>
+			<if test="room_id !=null and room_id !=''">
+				room_id=#{room_id},
+			</if>
+			<if test="model !=null and model !=''">
+				model=#{model},
+			</if>
+			<if test="picture !=null and picture !=''">
+				picture=#{picture}
+			</if>
+		</set>
+		where id=#{id}
+	</update>
+
+
+	<select id="getPeopleById" parameterType="int"
+		resultType="people">
+		select * from people where id=#{id}
+	</select>
+	<select id="getPeopleByPhone" parameterType="string"
+		resultType="people">
+		select * from people where phone=#{phone}
+	</select>
+
+	<select id="getPeople" parameterType="people"
+		resultType="people">
+		select * from people
+		<where>
+			<if test="id !=null and id !=''">
+				and id=#{id}
+			</if>
+			<if test="name !=null and name !=''">
+				and name=#{name}
+			</if>
+			<if test="type !=null and type !=''">
+				and type=#{type}
+			</if>
+			<if test="sex !=null and sex !=''">
+				and sex=#{sex}
+			</if>
+			<if test="phone !=null and phone !=''">
+				and phone=#{phone}
+			</if>
+			<if test="birthday !=null and birthday !=''">
+				and birthday=#{birthday}
+			</if>
+			<if test="register !=null and register !=''">
+				and register=#{register}
+			</if>
+			<if test="house_id !=null and house_id !=''">
+				and house_id=#{house_id}
+			</if>
+			<if test="room_id !=null and room_id !=''">
+				and room_id=#{room_id}
+			</if>
+		</where>
+	</select>
+
+	<select id="getModels" resultType="face">
+		select id,house_id,model from
+		people
+	</select>
+
+	<select id="getPicUrl" resultType="string" parameterType="int">
+		select
+		picture from people where id=#{id}
+	</select>
+
+	<!-- <select id="findRoles" parameterType="string" resultType="role"> select 
+		id,role_name as roleName,note from t_role where role_name like concat ('%',#{roleName},'%') 
+		</select> -->
+
+</mapper>

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE Configuration [
+<!ELEMENT Configuration (appenders*,loggers*)>
+<!ELEMENT appenders (Console*)>
+<!ELEMENT Console (PatternLayout*)>
+<!ELEMENT loggers (root?,logger*)>
+<!ELEMENT root (appender-ref*)>
+
+<!ATTLIST Configuration
+  status CDATA #IMPLIED
+  monitorInterval CDATA #IMPLIED
+>
+<!ATTLIST Console
+  name CDATA #IMPLIED
+  target CDATA #IMPLIED
+>
+<!ATTLIST root
+  level CDATA #IMPLIED
+>
+<!ATTLIST appender-ref
+  ref CDATA #IMPLIED
+>
+<!ATTLIST PatternLayout
+  pattern CDATA #IMPLIED
+>
+]>
+<Configuration status="INFO" monitorInterval="1800">
+	<appenders>
+		<Console name="consolePrint" target="SYSTEM_OUT">
+			<PatternLayout
+				pattern="%d{HH:mm:ss} [%t] %-5level %logger{36} - %msg%n" />
+		</Console>
+	</appenders>
+
+	<loggers>
+		<root level="DEBUG">
+			<appender-ref ref="consolePrint" />
+		</root>
+	</loggers>
+</Configuration>

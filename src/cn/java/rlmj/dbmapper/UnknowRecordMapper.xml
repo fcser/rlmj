@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.java.rlmj.dao.UnknowRecordMapper">
+
+	<select id="getRecords" parameterType="string" resultType="unknowrecord">
+		select * from unknow_recods where
+		<if test="beginTime!=null and beginTime!=''">
+            <![CDATA[   and DATE_FORMAT(tr.add_time, '%Y-%m-%d')>=  DATE_FORMAT(#{beginTime}, '%Y-%m-%d')   ]]>
+        </if>
+        <if test="endTime!=null and endTime!=''">
+      		<![CDATA[  and DATE_FORMAT(tr.add_time, '%Y-%m-%d') <= DATE_FORMAT(#{endTime}, '%Y-%m-%d')    ]]>
+        </if>
+	</select>
+	
+	<select id="queryStrangeRecords" parameterType="cn.java.rlmj.pojo.QueryStrange"
+		resultType="cn.java.rlmj.pojo.QueryStrangeResult">
+		select
+			equipment.id device_id,
+			equipment.house_id house_id,
+			tmp.datetime datetime,
+			tmp.picture picture
+		from
+		(
+			select 
+				equipment_id,
+				datetime,
+				picture
+			from
+				unknow_recods
+			where
+				<if test="deviceid!=null and deviceid!=0">
+				equipment_id = #{deviceid} and
+				</if>
+				datetime &gt;= #{starttime} and datetime &lt;= #{endtime}
+		) 	tmp, 
+			equipment
+		where
+			tmp.equipment_id = equipment.id
+			<if test="houseid!=null and houseid!=0">
+			and equipment.house_id = #{houseid}
+			</if>
+	</select>
+	
+	<insert id="insertRecord" parameterType="unknowrecord">
+		insert into unknow_recods (picture,datetime,equipment_id)
+		values(#{picture},#{datetime},#{equipment_id})
+	</insert>
+
+</mapper>

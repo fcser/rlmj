@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org/DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+
+	<typeAliases>
+		<typeAlias alias="people" type="cn.java.rlmj.pojo.People" />
+		<typeAlias alias="admin" type="cn.java.rlmj.pojo.Admin" />
+		<typeAlias alias="unknowrecord" type="cn.java.rlmj.pojo.UnknowRecord"/>
+		<typeAlias alias="equipment"
+			type="cn.java.rlmj.pojo.Equipment" />
+		<typeAlias alias="visitorsrecord"
+			type="cn.java.rlmj.pojo.VisitorsRecord" />
+		<typeAlias alias="face" type="cn.java.rlmj.sdkdo.Face" />
+	</typeAliases>
+
+	<environments default="development">
+		<environment id="development">
+			<transactionManager type="JDBC" />
+			<dataSource type="POOLED">
+				<property name="driver" value="com.mysql.jdbc.Driver" />
+				<property name="url"
+					value="jdbc:mysql://localhost:3306/mjxt?useUnicode=true&amp;characterEncoding=utf-8" />
+				<property name="username" value="root" />
+				<property name="password" value="123456" />
+			</dataSource>
+		</environment>
+	</environments>
+
+	<mappers>
+		<mapper resource="cn/java/rlmj/dbmapper/PeopleMapper.xml" />
+		<mapper resource="cn/java/rlmj/dbmapper/AdminMapper.xml" />
+		<mapper resource="cn/java/rlmj/dbmapper/EquipmentMapper.xml" />
+		<mapper resource="cn/java/rlmj/dbmapper/VisitorsRecordMapper.xml" />
+		<mapper resource="cn/java/rlmj/dbmapper/UnknowRecordMapper.xml" />
+	</mappers>
+</configuration>
